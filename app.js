@@ -3,33 +3,34 @@
 const {createElement: e, useState, useEffect} = React
 
 function App() {
-
-  console.log(`a - App`)
- 
+  console.log(`App start`)
   const [s, setS] = useState(function() {
-    console.log('lazy')
+    console.log('lazy initiate state')
     return 's'
   })
-
   useEffect(function() {
-    console.log(`c - effect = ${s}`)
+    console.log(`effect start s - ${s}`)
     Promise.resolve().then(function() {
-      console.log('before setS - s =', s, 'then setS')
-      setS('sos!')
-      // setS(function(prev) {
-      //   console.log('in setS prev =', prev)
-      //   return 'sos'
-      // })
-      console.log('d - after setS')
+      console.log('before setS s -', s)
+      // setS('sos')
+      setS(function(prev) {
+        console.log('in setS prev s -', prev)
+        return 'sos'
+      })
+      console.log('after setS')
     })
-
+    console.log('effect return cleaner')
     return function() {
-      console.log('clean effect')
+      console.log('effect cleaned')
     }
   })
-
-  console.log(`b - returned = ${s}`)
-  return e('div', {}, `my react app - ${s}`)
+  console.log(`App return renderer s - ${s}`)
+  return e('div', {onClick() {
+    setS(function(prev) {
+      console.log('click prev - ', prev)
+      return prev + '!!!'
+    })
+  }}, `my react app s - ${s}`)
 }
 
 ReactDOM.render(
