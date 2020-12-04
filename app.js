@@ -5,19 +5,19 @@ const {createElement: e, useState, useEffect} = React
 function App() {
   console.log(`App start`)
   const [s, setS] = useState(function() {
-    console.log('lazy initiate state')
+    console.log('App lazy initiate state')
     return 's'
   })
   useEffect(function() {
-    console.log(`effect start s - ${s}`)
+    console.log(`effect start`)
     Promise.resolve().then(function() {
-      console.log('before setS s -', s)
+      console.log('effect setS start')
       // setS('sos')
       setS(function(prev) {
-        console.log('in setS prev s -', prev)
+        console.log('effect setS prev s -', prev)
         return 'sos'
       })
-      console.log('after setS')
+      console.log('effect setS end')
     })
     console.log('effect return cleaner')
     return function() {
@@ -40,40 +40,24 @@ ReactDOM.render(
 
 /*
 setS(fn)
-- - -
-a - App 
-lazy 
-b - returned = s 
-c - effect = s 
-before setS - s = s then setS 
-in setS prev = s 
-a - App 
-b - returned = sos 
-d - after setS 
-clean effect 
-c - effect = sos 
-before setS - s = sos then setS 
-a - App 
-in setS prev = sos 
-b - returned = sos 
-d - after setS
 
+App start
+App lazy initiate state
+App return renderer s - s
+  effect start s - s
+  effect return cleaner
+  effect setS start s - s
+  effect setS prev s - s
+    App start
+    App return renderer s - sos
+  effect setS end
+    effect cleaned
+    effect start s - sos
+    effect return cleaner
+    effect setS start s - sos
+      App start
+      effect setS prev s - sos
+      App return renderer s - sos
+    effect setS end
 
-
-setS(value)
-- - -
-a - App 
-lazy 
-b - returned = s 
-c - effect = s 
-before setS - s = s then setS 
-a - App 
-b - returned = sos! 
-d - after setS 
-clean effect 
-c - effect = sos! 
-before setS - s = sos! then setS 
-a - App 
-b - returned = sos! 
-d - after setS
 */
