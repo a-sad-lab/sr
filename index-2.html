@@ -2,12 +2,13 @@
 <html lang="zh-hans">
 <head>
 <meta charset="utf-8">
-<title>useEffect 依赖 []</title>
+<title>useEffect 依赖所有外部作用域中会发生变化且在 effect 中使用的变量</title>
 </head>
 <body>
-<h1>useEffect 依赖 []</h1>
+<h1>useEffect 依赖所有外部作用域中会发生变化且在 effect 中使用的变量</h1>
 <div id="root">loading...</div>
 <hr />
+
 <code>
 <pre>
 'use strict'
@@ -34,7 +35,7 @@ function App() {
     return function() {
       console.log('effect cleaned')
     } 
-  }, [])
+  }/* 依赖所有外部作用域中会发生变化且在 effect 中使用的变量 */)
   console.log(`App return renderer s - ${s}`)
   return e('div', {onClick() {
     setS(function(prev) {
@@ -50,7 +51,6 @@ ReactDOM.render(
 )
 </pre>
 </code>
-
 <script src="react.development.js"></script>
 <script src="react-dom.development.js"></script>
 <script>
@@ -79,7 +79,7 @@ function App() {
     return function() {
       console.log('effect cleaned')
     } 
-  }, [])
+  }/* 依赖所有外部作用域中会发生变化且在 effect 中使用的变量 */)
   console.log(`App return renderer s - ${s}`)
   return e('div', {onClick() {
     setS(function(prev) {
@@ -105,13 +105,36 @@ App return renderer s - s
   App start
   App return renderer s - sos
   effect setS end
+    effect cleaned
+    effect start
+    effect return cleaner
+    effect setS start
+    App start
+    effect setS prev s - sos
+    App return renderer s - sos
+    effect setS end
 
 - - - clicked - - -
 
 click prev s - sos
 App start
 App return renderer s - sos!!!
-
+  effect cleaned
+  effect start
+  effect return cleaner
+  effect setS start
+  App start
+  effect setS prev s - sos!!!
+  App return renderer s - sos
+  effect setS end
+    effect cleaned
+    effect start
+    effect return cleaner
+    effect setS start
+    App start
+    effect setS prev s - sos
+    App return renderer s - sos
+    effect setS end
 */
 
 </script>
