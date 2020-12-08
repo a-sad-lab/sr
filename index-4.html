@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-hans">
+<html lang="en-us">
 <head>
 <meta charset="utf-8">
 <title>自定义 hook, useEffect 依赖 []</title>
@@ -11,46 +11,48 @@
 
 <code>
 <pre>
-'use strict'
-
-const {createElement: e, useState, useEffect} = React
-
-function useP() {
-  console.log('useP start')
-  const [s, setS] = useState(function() {
-    console.log('useP lazy initiate state')
-    return 's'
-  })
-  useEffect(function() {
-    console.log(`effect start`)
-    Promise.resolve().then(function() {
-      console.log('effect setS start')
-      setS(function(prev) {
-        console.log('effect setS prev s -', prev)
-        return 'sos'
-      })
-      console.log('effect setS end')
-    })
-    console.log('effect return cleaner')
-    return function() {
-      console.log('effect cleaned')
-    } 
-  }, [])
-  console.log('useP return s -', s)
-  return s
-}
-
-function App() {
-  console.log(`App start`)
-  const s = useP()
-  console.log(`App return renderer s - ${s}`)
-  return e('div', {}, `my react app s - ${s}`)
-}
-
-ReactDOM.render(
-  e(App),
-  document.getElementById('root')
-)
+┌──┬─────────────────────────────────────────────────────┐
+│1 │'use strict'                                         │
+│2 │                                                     │
+│3 │const {createElement: e, useState, useEffect} = React│
+│4 │                                                     │
+│5 │function useP() {                                    │
+│6 │  console.log('useP start')                          │
+│7 │  const [s, setS] = useState(function() {            │
+│8 │    console.log('useP lazy initiate state')          │
+│9 │    return 's'                                       │
+│10│  })                                                 │
+│11│  useEffect(function() {                             │
+│12│    console.log(`effect start`)                      │
+│13│    Promise.resolve().then(function() {              │
+│14│      console.log('effect setS start')               │
+│15│      setS(function(prev) {                          │
+│16│        console.log('effect setS prev s -', prev)    │
+│17│        return 'sos'                                 │
+│18│      })                                             │
+│19│      console.log('effect setS end')                 │
+│20│    })                                               │
+│21│    console.log('effect return cleaner')             │
+│22│    return function() {                              │
+│23│      console.log('effect cleaned')                  │
+│24│    }                                                │
+│25│  }, [])                                             │
+│26│  console.log('useP return s -', s)                  │
+│27│  return s                                           │
+│28│}                                                    │
+│29│                                                     │
+│30│function App() {                                     │
+│31│  console.log(`App start`)                           │
+│32│  const s = useP()                                   │
+│33│  console.log(`App return renderer s - ${s}`)        │
+│34│  return e('div', {}, `my react app s - ${s}`)       │
+│35│}                                                    │
+│36│                                                     │
+│37│ReactDOM.render(                                     │
+│38│  e(App),                                            │
+│39│  document.getElementById('root')                    │
+│40│)                                                    │
+└──┴─────────────────────────────────────────────────────┘
 </pre>
 </code>
 <script src="react.development.js"></script>
